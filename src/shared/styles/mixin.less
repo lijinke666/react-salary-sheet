@@ -1,0 +1,104 @@
+//定义一些公用class
+@import "vars.less";
+.clearfix(){
+  &::before,&::after{
+    clear:both;
+    content:"";
+    display: table;
+    zoom: 1;
+  }
+}
+.hidden(){
+  display: none !important;
+}
+.hidden{
+  .hidden();
+}
+.text-center(){
+  text-align: center
+}
+.transition(@time:.3s){
+  transition: all @time cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.center(){
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn-hover(@color:@default-color,@lighten:3%){
+    color:#fff;
+    background-color: @color;
+    &:hover{
+        background-color: lighten(@color,@lighten)
+    }
+}
+
+.ellipsis-n(@n){
+    -webkit-line-clamp:@n;
+    display:-webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    justify-content: center;
+    -webkit-box-orient: vertical;
+}
+.ellipsis-1(){
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.publicScaleAnimate(@time:.4s){
+  animation: publicScaleAnimate @time cubic-bezier(.57,.03,.38,.89);
+}
+.publicTranslateYAnimate(@time:.4s){
+  animation: publicTranslateYAnimate @time cubic-bezier(.57,.03,.38,.89);
+}
+.publicTranslateYAnimate2(@time:.4s){
+  animation: publicTranslateYAnimate2 @time cubic-bezier(.57,.03,.38,.89);
+}
+.publicTranslateXAnimate(@time:.4s){
+  animation: publicTranslateXAnimate @time cubic-bezier(.57,.03,.38,.89);
+}
+
+@keyframes publicScaleAnimate{
+  from{
+    opacity: 0;
+    transform: scale(0)
+  }
+  to{
+    opacity: 0;
+    transform: scale(1)
+  }
+}
+
+@keyframes publicTranslateYAnimate{
+  from{
+    opacity: 0;
+    transform: translate3d(0,-60px,0)
+  }
+  to{
+    opacity: 0;
+    transform: translate3d(0,0,0)
+  }
+}
+@keyframes publicTranslateYAnimate2{
+  from{
+    opacity: 0;
+    transform: translate3d(0,60px,0)
+  }
+  to{
+    opacity: 0;
+    transform: translate3d(0,0,0)
+  }
+}
+
+@keyframes publicTranslateXAnimate{
+  from{
+    opacity: 0;
+    transform: translate3d(-60px,0,0)
+  }
+  to{
+    opacity: 0;
+    transform: translate3d(0,0,0)
+  }
+}

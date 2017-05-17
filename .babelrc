@@ -1,0 +1,20 @@
+{
+  "presets": [         
+    [
+      "es2015",
+      {
+        "modules": false
+      }
+    ],
+    "react"
+  ],
+  "plugins": [
+    "syntax-dynamic-import",   //解析webpack2 按需加载 import 语法
+    "transform-async-to-generator",     //支持async写法
+    "transform-decorators-legacy",
+    "transform-object-rest-spread",
+    "transform-class-properties",
+    "transform-runtime",
+    "react-hot-loader/babel"      //热跟新      
+  ]
+}

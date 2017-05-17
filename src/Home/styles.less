@@ -1,0 +1,52 @@
+@import "~styles/vars.less";
+@import "~styles/mixin.less";
+
+.home{
+    .title{
+        font-weight: 500;
+        font-size:24px;
+        span{
+            .transition()
+        }
+    }
+    .center{
+        text-align: center;
+    }
+    .active{
+        animation: activeAnimate .3s cubic-bezier(0.075, 0.82, 0.165, 1);
+        color:@info-color;
+    }
+    .fg{
+        margin:0 10px;
+    }
+    .send-email-btn{
+        margin-top:15px;
+        float: right;
+        input{
+            padding: 5px 10px;
+            margin-right:10px;
+            width:500px;
+        }
+    }
+    .home-btn{
+        margin-left:20px;
+    }
+    .table{
+        margin-top:20px;
+        border:1px solid;
+        width:100%;
+        td{
+            padding: 3px 5px;
+            text-align: center;
+        }
+    }
+
+}
+@keyframes activeAnimate{
+    from{
+        transform: scale(1.1) translate3d(-30px,0,0)
+    }
+    to{
+        transform: scale(1) translate3d(-30px,0,0)
+    }
+}
