@@ -7,12 +7,14 @@ import Button from "shared/components/Button"
 import { Link } from "react-router"
 import classNames from "classnames"
 import uploadExcel, { sendEmail } from "./action"
+import { defaultEmailTitle, tableFields, companyName, currentTime,toolInfo } from "../../config"
 
 import "./styles.less"
 
 @connect(
     ({ ExcelAction }) => ({
-        excelInfo: ExcelAction.excelInfo
+        excelInfo: ExcelAction.excelInfo,
+        successUsers:ExcelAction.successUsers
     }),
     (dispatch) => (
         bindActionCreators({
@@ -28,34 +30,36 @@ export default class Home extends React.Component {
         excelInfo: [],
         sendEmailReady: false,
         emailTile: undefined,
-        activeType: "one"
+        activeType: "one",
+        previewTitle: defaultEmailTitle,
+        sendEmailTime: currentTime(),
+        sendEmailLoading:false
     }
     constructor(props) {
         super(props)
     }
     render() {
-        const { excelInfo, excelReady, sendEmailReady, activeType } = this.state
-        const { excelInfo: excelResult } = this.props
+        const { excelInfo, excelReady,sendEmailLoading, sendEmailReady, activeType, previewTitle, sendEmailTime } = this.state
+        const { excelInfo: excelResult,successUsers } = this.props
+        console.log(successUsers);
 
-        // const thead = excelResult && Object.keys(excelResult[0]) || []
-        // console.log(thead);
         return (
             <div key="home">
                 <main className="content" key="content">
                     <Container className="home">
                         <h1 className="title">
                             <span className={classNames({ "active": activeType === "one" })}>1.选择工资条excel(确保格式正确)  <span>>></span></span>
-                            <span className={classNames({ "active": activeType === "two" })}> 2.上传工资条(确认无误) <span>>></span> </span>
+                            <span className={classNames({ "active": activeType === "two" })}> 2.确认工资条信息 <span>>></span> </span>
                             <span className={classNames({ "active": activeType === "three" })}>3.发送邮件(填写邮件标题)</span>
                         </h1>
                         <form method="post" name="upload-excel-form" encType="multipart/form-data" className="upload-excel-form">
                             <input type="file" name="excel" ref="excel" className="hidden excle-origin-btn" onChange={this.selectExcel} />
                             <Button type="info" onClick={this.clickFileBtn}>选择工资表</Button>
-                            {
+                            {/*{
                                 excelReady
-                                    ? <Button className="home-btn" htmlType="button" type="primary" onClick={this.uploadExcel}>上传工资表</Button>
+                                    ? <Button className="home-btn" htmlType="button" type="primary" onClick={this.uploadExcel}>确认工资条信息</Button>
                                     : <Button className="home-btn" htmlType="button" type="error" onClick={() => alert('请选择工资表')} >未选择工资表</Button>
-                            }
+                            }*/}
 
                             <ol className="none">
                                 {
@@ -78,41 +82,80 @@ export default class Home extends React.Component {
                                             <h4 className="title center">确认工资条信息</h4>
                                             <table className="table">
                                                 <thead>
-
-                                                    {/*<tr key={`thead`}>
-                                                    {
-                                                        thead.map((name, index) => {
-                                                            return (
-                                                                <td>{name}</td>
-
-                                                            )
-                                                        })
-                                                    }
-                                                </tr>*/}
-
+                                                    <tr>
+                                                        {
+                                                            Object.values(tableFields).map((value) => (<td>{value}</td>)).slice(0,Object.values(tableFields).length -1)
+                                                        }
+                                                    </tr>
                                                 </thead>
                                                 <tbody>
                                                     {
                                                         excelResult.map((item, index) => {
-                                                            let key = Object.keys(item)[index]
-                                                            console.log(key);
                                                             return (
                                                                 <tr key={`tbody${index}`}>
-                                                                    <td>{item["id"]}</td>
-                                                                    <td>{item["姓名"]}</td>
-                                                                    <td>{item['工作邮箱']}</td>
+                                                                    <td>{item[tableFields["id"]]}</td>
+                                                                    <td>{item[tableFields["department"]]}</td>
+                                                                    <td>{item[tableFields['name']]}</td>
+                                                                    <td>{item[tableFields['duty']]}</td>
+                                                                    <td>{item[tableFields['baseWage']]}</td>
+                                                                    <td>{item[tableFields['daysLostFromWork']]}</td>
+                                                                    <td>{item[tableFields['absenceDeductions']]}</td>
+                                                                    <td>{item[tableFields['beLate']]}</td>
+                                                                    <td>{item[tableFields['bonus']]}</td>
+                                                                    <td>{item[tableFields['wagesPayable']]}</td>
+                                                                    <td>{item[tableFields['insurance']]}</td>
+                                                                    <td>{item[tableFields['reservedFunds']]}</td>
+                                                                    <td>{item[tableFields['subtotal']]}</td>
+                                                                    <td>{item[tableFields['OtherDeduction']]}</td>
+                                                                    <td>{item[tableFields['salary']]}</td>
+                                                                    <td>{item[tableFields['taxWage']]}</td>
+                                                                    <td>{item[tableFields['ToBeCollectedTax']]}</td>
+                                                                    <td>{item[tableFields['netPayroll']]}</td>
+                                                                    <td>{item[tableFields['remark']]}</td>
                                                                 </tr>
                                                             )
                                                         })
                                                     }
                                                 </tbody>
                                             </table>
+                                            <div className="preview">
+                                                <h4 className="title">发送到邮箱的格式  大致如下:</h4>
+                                                <h5 className="sub-title">标题: {previewTitle.replace("{name}", "xxx")}</h5>
+                                                <table className="preview-table" key="preview-table">
+                                                    <thead>
+                                                        <tr>
+                                                            {
+                                                                Object.values(tableFields).map((value) => {
+                                                                    return (
+                                                                        <td>{value}</td>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            {
+                                                                Object.keys(tableFields).map((item) => (<td>xxxx</td>))
+                                                            }
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <p className="preview-footer" style={{"marginTop":"20px"}}>{companyName}</p>
+                                                <p className="preview-footer">{sendEmailTime}</p>
+                                                <p className="preview-footer">{toolInfo}</p>
+                                            </div>
                                             {
                                                 sendEmailReady
                                                     ? (
                                                         <div className="send-email-btn">
-                                                            <input type="text" onChange={(e) => this.setState({ emailTile: e.target.value })} placeholder="邮件标题: tip 不填则使用默认标题 [当前月份+员工名字+工资表]" />
-                                                            <Button type="warning" onClick={this.sendEmail}>确认发送邮件</Button>
+                                                            <input type="text" onChange={this.changeMailTitle} placeholder="邮件标题: tip 不填则使用默认标题 [年+月+员工名字+工资表]" />
+                                                            {
+                                                                sendEmailLoading
+                                                                ? <Button type="disabled">发送邮件中...请稍后</Button>
+                                                                : <Button type="warning" onClick={this.sendEmail}>确认发送邮件</Button>
+                                                            }
+                                                            
                                                         </div>
 
                                                     )
@@ -130,8 +173,24 @@ export default class Home extends React.Component {
             </div>
         )
     }
-    sendEmail = () => {
-        this.props.sendEmail()
+    changeMailTitle = (e) => {
+        const value = e.target.value
+        if (value == "") {
+            this.setState({ previewTitle: defaultEmailTitle })
+        } else {
+            this.setState({ previewTitle: e.target.value })
+        }
+    }
+    sendEmail = async () => {
+        const { sendEmailTime, previewTitle } = this.state
+        if(confirm(`邮件名【${previewTitle}】.确认发送吗?`)){
+            this.setState({sendEmailLoading:true,activeType:"three"})
+            await this.props.sendEmail(previewTitle, sendEmailTime)
+            if(this.props.successUsers){
+                this.setState({sendEmailLoading:false})
+                alert(`【${this.props.successUsers.join("|")}】邮件发送成功!请提醒他们注意查收`)
+            }
+        }
     }
     //上传工资表
     uploadExcel = () => {
@@ -139,7 +198,7 @@ export default class Home extends React.Component {
         const formData = new FormData(formEle)
         const { uploadExcel } = this.props
         uploadExcel(formData)
-        this.setState({ sendEmailReady: true,activeType:"three" })
+        this.setState({ sendEmailReady: true, activeType: "two" })
     }
     clickFileBtn = () => {
         const fileBtn = this.dom.querySelector('.excle-origin-btn')
@@ -178,13 +237,14 @@ export default class Home extends React.Component {
                 const result = this.result;        //读取失败时  null   否则就是读取的结果
                 _this.setState({
                     excelReady: true,
-                    activeType:"two",
+                    activeType: "two",
                     excelInfo: [
                         {
                             name,
                             size: `${~~(size / 1024)}kb`
                         }]
                 })
+                _this.uploadExcel()
             }
             reader.readAsDataURL(file);      //base64
         })

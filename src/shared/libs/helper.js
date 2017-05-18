@@ -15,8 +15,8 @@ const helper = {
       m = date.getMinutes(),
       s = date.getSeconds(),
       hh = h < 10 ? `0${h}` : h,
-      mm = h < 10 ? `0${m}` : m,
-      ss = h < 10 ? `0${s}` : s
+      mm = m < 10 ? `0${m}` : m,
+      ss = s < 10 ? `0${s}` : s
 
       return `${year}/${month}/${day} ${hh}:${mm}:${s}` //当前时间
   },

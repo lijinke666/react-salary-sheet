@@ -12,11 +12,12 @@ export default function(formData){
     }
 }
 
-export function sendEmail(){
+export function sendEmail(emailTitle,sendEmailTime){
     return async function(dispatch){
-        const sendEmail = await helper.postJson('/excel/sendEmail')
+        const successUsers = await helper.postJson('/excel/sendEmail',{emailTitle,sendEmailTime})
         dispatch({
-            type:SEND_EMAIL
+            type:SEND_EMAIL,
+            successUsers
         })
     }
 }

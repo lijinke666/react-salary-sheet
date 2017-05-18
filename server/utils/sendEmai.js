@@ -1,19 +1,20 @@
 const nodemailer = require("nodemailer") //发邮件
 const debug = require('debug')('utils-sendEmail')
+const {AUTHCODE,defaultEmailTitle,adminEmail,emailService} = require("../../config")
 
 module.exports = {
     sendEmail( options = {} ) {
         let defaultOptions = {
-            from: "1359518268@qq.com",
+            from: adminEmail,
             to: "jinke@pokerlegend.cn",
-            subject: `${new Date().getMonth() + 1}月工资条`,
-            pass: "uctllvpdfeekiefi",
+            subject: defaultEmailTitle,
+            pass: AUTHCODE,
             html: "<p>无内容</p>"
         }
         let currentOptions = Object.assign({}, defaultOptions, options)
         const { from, to, subject, pass, html } = currentOptions
         const mailTransport = nodemailer.createTransport({
-            service: "qq",
+            service: emailService,
             auth: {
                 user: from,                                     //qq邮箱账户
                 pass,                      //这里不是登录密码  而是 安全授权密码
@@ -27,12 +28,15 @@ module.exports = {
             html,                           //邮件内容可以嵌入  html代码 图片都可以
             // generateTextFromHtml:true              //将html转换为文本
         }
-        mailTransport.sendMail(mailOptions, (err, { messageId, response }) => {
-            if (err) {
-                debug('邮件发送失败')
-                throw err
-            }
-            debug(`邮件发送成功!`, messageId, response)
+        return new Promise((res,rej)=>{
+            mailTransport.sendMail(mailOptions, (err, { messageId, response }) => {
+                if (err) {
+                    debug('邮件发送失败')
+                    rej(err)
+                }
+                debug(`邮件发送成功!`, messageId, response)
+                res()
+            })
         })
     }
 }
