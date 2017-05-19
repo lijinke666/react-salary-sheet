@@ -11,8 +11,8 @@ const options = {
     AUTHCODE:"uctllvpdfeekiefi",            //授权码
     staticPath: __dirname + '/../public',
     currentMonth:new Date().getMonth()+1,
-    companyName:"海南传奇智力体育科技有限公司",
-    toolInfo:"By:传奇扑克发工资条小工具v0.1",
+    companyName:"金珂拉皮条有限公司",       //公司名字
+    toolInfo:"工资条发放小工具v0.1",        //工具名字
     currentTime(){
       const date = new Date(),
       year = date.getFullYear(),
@@ -27,7 +27,7 @@ const options = {
 
       return `${year}/${month}/${day} ${hh}:${mm}:${s}` //当前时间
     },
-    //excelTojson 转出key是中文...
+    //配置表格字段  需要和 excel表格一致  key无所谓  value一定要一样
     tableFields:{
         "id":"序号",
         "department":"部门",

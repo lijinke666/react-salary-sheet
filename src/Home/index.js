@@ -7,14 +7,14 @@ import Button from "shared/components/Button"
 import { Link } from "react-router"
 import classNames from "classnames"
 import uploadExcel, { sendEmail } from "./action"
-import { defaultEmailTitle, tableFields, companyName, currentTime,toolInfo } from "../../config"
+import { defaultEmailTitle, tableFields, companyName, currentTime, toolInfo } from "../../config"
 
 import "./styles.less"
 
 @connect(
     ({ ExcelAction }) => ({
         excelInfo: ExcelAction.excelInfo,
-        successUsers:ExcelAction.successUsers
+        successUsers: ExcelAction.successUsers
     }),
     (dispatch) => (
         bindActionCreators({
@@ -33,15 +33,14 @@ export default class Home extends React.Component {
         activeType: "one",
         previewTitle: defaultEmailTitle,
         sendEmailTime: currentTime(),
-        sendEmailLoading:false
+        sendEmailLoading: false
     }
     constructor(props) {
         super(props)
     }
     render() {
-        const { excelInfo, excelReady,sendEmailLoading, sendEmailReady, activeType, previewTitle, sendEmailTime } = this.state
-        const { excelInfo: excelResult,successUsers } = this.props
-        console.log(successUsers);
+        const { excelInfo, excelReady, sendEmailLoading, sendEmailReady, activeType, previewTitle, sendEmailTime } = this.state
+        const { excelInfo: excelResult, successUsers } = this.props
 
         return (
             <div key="home">
@@ -55,11 +54,6 @@ export default class Home extends React.Component {
                         <form method="post" name="upload-excel-form" encType="multipart/form-data" className="upload-excel-form">
                             <input type="file" name="excel" ref="excel" className="hidden excle-origin-btn" onChange={this.selectExcel} />
                             <Button type="info" onClick={this.clickFileBtn}>选择工资表</Button>
-                            {/*{
-                                excelReady
-                                    ? <Button className="home-btn" htmlType="button" type="primary" onClick={this.uploadExcel}>确认工资条信息</Button>
-                                    : <Button className="home-btn" htmlType="button" type="error" onClick={() => alert('请选择工资表')} >未选择工资表</Button>
-                            }*/}
 
                             <ol className="none">
                                 {
@@ -84,37 +78,25 @@ export default class Home extends React.Component {
                                                 <thead>
                                                     <tr>
                                                         {
-                                                            Object.values(tableFields).map((value) => (<td>{value}</td>)).slice(0,Object.values(tableFields).length -1)
+                                                            Object.values(tableFields).map((value) => (<td>{value}</td>))
                                                         }
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                        excelResult.map((item, index) => {
-                                                            return (
-                                                                <tr key={`tbody${index}`}>
-                                                                    <td>{item[tableFields["id"]]}</td>
-                                                                    <td>{item[tableFields["department"]]}</td>
-                                                                    <td>{item[tableFields['name']]}</td>
-                                                                    <td>{item[tableFields['duty']]}</td>
-                                                                    <td>{item[tableFields['baseWage']]}</td>
-                                                                    <td>{item[tableFields['daysLostFromWork']]}</td>
-                                                                    <td>{item[tableFields['absenceDeductions']]}</td>
-                                                                    <td>{item[tableFields['beLate']]}</td>
-                                                                    <td>{item[tableFields['bonus']]}</td>
-                                                                    <td>{item[tableFields['wagesPayable']]}</td>
-                                                                    <td>{item[tableFields['insurance']]}</td>
-                                                                    <td>{item[tableFields['reservedFunds']]}</td>
-                                                                    <td>{item[tableFields['subtotal']]}</td>
-                                                                    <td>{item[tableFields['OtherDeduction']]}</td>
-                                                                    <td>{item[tableFields['salary']]}</td>
-                                                                    <td>{item[tableFields['taxWage']]}</td>
-                                                                    <td>{item[tableFields['ToBeCollectedTax']]}</td>
-                                                                    <td>{item[tableFields['netPayroll']]}</td>
-                                                                    <td>{item[tableFields['remark']]}</td>
-                                                                </tr>
-                                                            )
-                                                        })
+                                                       excelResult.map((item,index)=>{
+                                                           return (
+                                                               <tr key={`result${index}`}>
+                                                                   {
+                                                                       Object.keys(tableFields).map((key)=>{
+                                                                           return (
+                                                                               <td>{item[tableFields[key]]}</td>
+                                                                           )
+                                                                       })
+                                                                   }
+                                                               </tr>
+                                                           )
+                                                       }) 
                                                     }
                                                 </tbody>
                                             </table>
@@ -141,7 +123,7 @@ export default class Home extends React.Component {
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                                <p className="preview-footer" style={{"marginTop":"20px"}}>{companyName}</p>
+                                                <p className="preview-footer" style={{ "marginTop": "20px" }}>{companyName}</p>
                                                 <p className="preview-footer">{sendEmailTime}</p>
                                                 <p className="preview-footer">{toolInfo}</p>
                                             </div>
@@ -152,10 +134,10 @@ export default class Home extends React.Component {
                                                             <input type="text" onChange={this.changeMailTitle} placeholder="邮件标题: tip 不填则使用默认标题 [年+月+员工名字+工资表]" />
                                                             {
                                                                 sendEmailLoading
-                                                                ? <Button type="disabled">发送邮件中...请稍后</Button>
-                                                                : <Button type="warning" onClick={this.sendEmail}>确认发送邮件</Button>
+                                                                    ? <Button type="disabled">发送邮件中...请稍后</Button>
+                                                                    : <Button type="warning" onClick={this.sendEmail}>确认发送邮件</Button>
                                                             }
-                                                            
+
                                                         </div>
 
                                                     )
@@ -183,11 +165,11 @@ export default class Home extends React.Component {
     }
     sendEmail = async () => {
         const { sendEmailTime, previewTitle } = this.state
-        if(confirm(`邮件名【${previewTitle}】.确认发送吗?`)){
-            this.setState({sendEmailLoading:true,activeType:"three"})
+        if (confirm(`邮件名【${previewTitle}】.确认发送吗?`)) {
+            this.setState({ sendEmailLoading: true, activeType: "three" })
             await this.props.sendEmail(previewTitle, sendEmailTime)
-            if(this.props.successUsers){
-                this.setState({sendEmailLoading:false})
+            if (this.props.successUsers) {
+                this.setState({ sendEmailLoading: false })
                 alert(`【${this.props.successUsers.join("|")}】邮件发送成功!请提醒他们注意查收`)
             }
         }

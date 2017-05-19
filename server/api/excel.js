@@ -5,7 +5,7 @@ const fs = require("fs")
 const debug = require('debug')('excel')
 const multiparty = require('multiparty')
 const xls2json = require("xls-to-json")
-const { host, port, staticPath, tableFields, companyName,toolInfo } = require("./../../config")
+const { host, port, staticPath, tableFields, companyName, toolInfo } = require("./../../config")
 
 const email = require('../utils/sendEmai')
 
@@ -56,33 +56,17 @@ router.post('/sendEmail', (req, res, next) => {
         const { sendEmailTime, emailTitle } = JSON.parse(postData)
         debug('[接收到客户端数据]: ', postData)
         const jsonResult = JSON.parse(fs.readFileSync(outputJsonPath).toString())
-        let fields =""
+        let fields = ""
         Object.values(tableFields).map((value) => fields += `<td style="${tdStyle}">${value}</td>`)
-
+        
+        
         for (let item of jsonResult) {
-            let content =""
-            content += `<tr>
-                    <td style="${tdStyle}">${item[tableFields["id"]]}</td>
-                    <td style="${tdStyle}">${item[tableFields["department"]]}</td>
-                    <td style="${tdStyle}">${item[tableFields['name']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['duty']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['baseWage']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['daysLostFromWork']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['absenceDeductions']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['beLate']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['bonus']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['wagesPayable']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['insurance']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['reservedFunds']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['subtotal']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['OtherDeduction']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['salary']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['taxWage']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['ToBeCollectedTax']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['netPayroll']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['remark']]}</td>
-                    <td style="${tdStyle}">${item[tableFields['email']]}</td>
-                </tr>`
+            let content = ""
+            let str = ""
+             Object.keys(tableFields).forEach((key)=>{
+                 str += `<td style="${tdStyle}">${item[tableFields[key]]}</td>`
+             })
+             content += `<tr>${str}</tr>`
             const html = `<table style="margin-top:20px;border:1px solid;width:100%;">
                     <thead>
                         <tr>${fields}</tr>
