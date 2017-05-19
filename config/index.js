@@ -25,7 +25,7 @@ const options = {
       mm = m < 10 ? `0${m}` : m,
       ss = s < 10 ? `0${s}` : s
 
-      return `${year}/${month}/${day} ${hh}:${mm}:${s}` //当前时间
+        return year + "/" + month + "/" + day + " " + hh + ":" + mm + ":" + ss //当前时间
     },
     //配置表格字段  需要和 excel表格一致  key无所谓  value一定要一样
     tableFields:{
