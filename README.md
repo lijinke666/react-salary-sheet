@@ -5,7 +5,7 @@
 - 首先安装 `npm i` or `yarn`
 - 启动 `npm start`
 - 启动开发服务器 `npm run dev-server`
-- 启动生产服务器 `npm run prod-server`  其实没得必要
+- 启动生产服务器 `npm run prod-server`  如需部署到内网 之内的可以用这个 
 - 打包 `npm run build`
 
 ---------------------
@@ -48,9 +48,9 @@
   }
 ```
 
- ####你的excel 表格
+ ####你的excel 表格   名字 和工作邮箱 必填
  
-| 序号        | 其他列....           | 工作 邮箱 |
+| 序号        | 员工姓名          | 工作 邮箱 |
 | ------------- |:-------------:| -----:|
 | 1    | xxxxx | xxxx@xx.com |
 | 2    | xxxx     |    xxxx@xx.com|
