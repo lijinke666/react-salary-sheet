@@ -12,7 +12,7 @@
 
 #### 配置
 - 修改 `/config/index.js`
-```
+```javascript
   const options = {
         ...
         emailService:"你的邮件服务器",            // qq || 163 ...
