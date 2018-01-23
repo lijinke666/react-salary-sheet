@@ -1,7 +1,8 @@
 # send-wages-tool
-##### 发放工资条小工具
-## 发工资条的时候 要一个一个的发到同事的邮箱,很麻烦  开发这个小工具 解决人事 的烦恼
+发放工资条小工具
+发工资条的时候 要一个一个的发到同事的邮箱,很麻烦  开发这个小工具 解决人事 的烦恼
 
+## 开发与部署
 - 首先安装 `npm i` or `yarn`
 - 启动 `npm start`
 - 启动开发服务器 `npm run dev-server`
@@ -10,8 +11,8 @@
 
 ---------------------
 
-#### 配置
-- 修改 `/config/index.js`
+## 配置
+> 修改 `/config/index.js`
 ```javascript
   const options = {
         ...
@@ -58,5 +59,4 @@
 
 :)
 
-#####  配置好了  `npm start` `npm run dev-server`  咻咻咻~查收邮件吧!
  
