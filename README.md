@@ -1,24 +1,32 @@
 # send-wages-tool
 发放工资条小工具
-发工资条的时候 要一个一个的发到同事的邮箱,很麻烦  开发这个小工具 解决人事 的烦恼
+发工资条的时候 人事首先要做一个excel表格 里面有所有同事的工资
+然后要一个一个的手动发到同事的邮箱,很麻烦 
+开发这个小工具 解决人事 的烦恼
+
+</br>
+
+赶紧部署给你的人事姐姐用吧  : (#^.^#)
 
 ## 开发与部署
-- 首先安装 `npm i` or `yarn`
-- 启动 `npm start`
+- `git clone https://github.com/lijinke666/send-wages-tool.git`
+- 安装依赖 `npm install` or  `yarn`
+- 本地开发 `npm start`
 - 启动开发服务器 `npm run dev-server`
-- 启动生产服务器 `npm run prod-server`  如需部署到内网 之内的可以用这个 
+- 启动生产服务器 `npm run prod-server`  部署运行这个即可
 - 打包 `npm run build`
 
 ---------------------
 
 ## 配置
+
 > 修改 `/config/index.js`
 ```javascript
   const options = {
         ...
         emailService:"你的邮件服务器",            // qq || 163 ...
         adminEmail:"xxx@xx.com",                //发送邮件的那个人的邮箱
-        AUHCODE:"xxxxxxxxxxxxx",                //授权码   如qq  需要在qq邮箱》设置》账户  里面去申请
+        AUHCODE:"xxxxxxxxxxxxx",                //授权码   如qq  需要在qq邮箱 > 设置 > 账户  里面去申请
         companyName:"xxxxxxxxxx",               //公司名字
         toolInfo:"xxxxxxxxxxxxxxx",             //工具名字
         
@@ -49,7 +57,8 @@
   }
 ```
 
- ####你的excel 表格   名字 和工作邮箱 必填
+ ## excel 格式
+ > 你的excel 表格   名字 和工作邮箱 必填
  
 | 序号        | 员工姓名          | 工作 邮箱 |
 | ------------- |:-------------:| -----:|
@@ -57,6 +66,7 @@
 | 2    | xxxx     |    xxxx@xx.com|
 | 3 | xxxxx     |     xxxx@xx.com |
 
-:)
+
+Have Fun :)
 
  
