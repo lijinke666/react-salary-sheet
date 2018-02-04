@@ -1,8 +1,9 @@
 {
-  "name": "Jinke",
+  "name": "send-wages-tool",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "jinke",
+  "author": "jinke.li",
+  "description": "基于React,Node.js 的 便捷发送工资条 到员工邮箱 的小工具",
   "license": "MIT",
   "scripts": {
     "start": "npm run dev",
@@ -37,6 +38,7 @@
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "rimraf": "^2.6.0",
+    "sweetalert": "^2.1.0",
     "webpack": "^2.2.1",
     "webpack-bundle-analyzer": "^2.4.0",
     "webpack-dev-server": "^2.3.0",

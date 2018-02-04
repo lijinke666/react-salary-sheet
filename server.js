@@ -7,7 +7,8 @@ const app = express()
 const http = require("http").createServer(app)
 const fs = require('fs')
 const cors = require('cors')
-const {serverPORT} = require('./config')
+const { serverPORT } = require('./config')
+const { version, name } = require('./package.json')
 const writeIndex = require('./server/utils/writeIndex')
 
 //中间键部分
@@ -16,7 +17,7 @@ app.use(express.static(`${__dirname}/public`));
 app.use(bodyParser.json())
 // 转换 application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
-    extended:false
+    extended: false
 }))
 app.use(cors())
 //将打包的dist/index.html  写入到  public/index.html
@@ -34,8 +35,8 @@ app.get("/", (req, res, next) => {
 app.use('/excel', require("./server/api/excel"))
 
 const serverRuningInfo = `
-    =============== [ send wages tool  ] ===============
-    =============== [ v.0.1 ] ================
+    =============== [ ${name}  ] ===============
+    =============== [ v.${version} ] ================
     =============== [ port : ${port} ] ============== 
                         :)
 `

@@ -6,6 +6,7 @@ import Container from "shared/components/Container"
 import Button from "shared/components/Button"
 import { Link } from "react-router"
 import classNames from "classnames"
+import swal from "sweetalert"
 import uploadExcel, { sendEmail } from "./action"
 import { defaultEmailTitle, tableFields, companyName, currentTime, toolInfo } from "../../config"
 
@@ -33,13 +34,23 @@ export default class Home extends React.Component {
         activeType: "one",
         previewTitle: defaultEmailTitle,
         sendEmailTime: currentTime(),
-        sendEmailLoading: false
+        sendEmailLoading: false,
+        loadingExcel: false
     }
     constructor(props) {
         super(props)
     }
     render() {
-        const { excelInfo, excelReady, sendEmailLoading, sendEmailReady, activeType, previewTitle, sendEmailTime } = this.state
+        const {
+            loadingExcel,
+            excelInfo,
+            excelReady,
+            sendEmailLoading,
+            sendEmailReady,
+            activeType,
+            previewTitle,
+            sendEmailTime
+             } = this.state
         const { excelInfo: excelResult, successUsers } = this.props
 
         return (
@@ -53,7 +64,10 @@ export default class Home extends React.Component {
                         </h1>
                         <form method="post" name="upload-excel-form" encType="multipart/form-data" className="upload-excel-form">
                             <input type="file" name="excel" ref="excel" className="hidden excle-origin-btn" onChange={this.selectExcel} />
+
                             <Button type="info" onClick={this.clickFileBtn}>选择工资表</Button>
+
+
 
                             <ol className="none">
                                 {
@@ -84,19 +98,19 @@ export default class Home extends React.Component {
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                       excelResult.map((item,index)=>{
-                                                           return (
-                                                               <tr key={`result${index}`}>
-                                                                   {
-                                                                       Object.keys(tableFields).map((key)=>{
-                                                                           return (
-                                                                               <td>{item[tableFields[key]]}</td>
-                                                                           )
-                                                                       })
-                                                                   }
-                                                               </tr>
-                                                           )
-                                                       }) 
+                                                        excelResult.map((item, index) => {
+                                                            return (
+                                                                <tr key={`result${index}`}>
+                                                                    {
+                                                                        Object.keys(tableFields).map((key) => {
+                                                                            return (
+                                                                                <td>{item[tableFields[key]]}</td>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                </tr>
+                                                            )
+                                                        })
                                                     }
                                                 </tbody>
                                             </table>
@@ -146,7 +160,7 @@ export default class Home extends React.Component {
 
                                         </div>
                                     )
-                                    : excelResult && excelResult.code && alert(`${excelResult.message}:(`) && this.setState({ sendEmailReady: false })
+                                    : excelResult && excelResult.code && swal(`${excelResult.message}:(`) && this.setState({ sendEmailReady: false })
 
                             }
                         </form>
@@ -163,23 +177,30 @@ export default class Home extends React.Component {
             this.setState({ previewTitle: e.target.value })
         }
     }
-    sendEmail = async () => {
+    sendEmail = () => {
         const { sendEmailTime, previewTitle } = this.state
-        if (confirm(`邮件名【${previewTitle}】.确认发送吗?`)) {
-            this.setState({ sendEmailLoading: true, activeType: "three" })
-            await this.props.sendEmail(previewTitle, sendEmailTime)
-            if (this.props.successUsers) {
-                this.setState({ sendEmailLoading: false })
-                alert(`【${this.props.successUsers.join("|")}】邮件发送成功!请提醒他们注意查收`)
-            }
-        }
+        swal({
+            title: `邮件名【${previewTitle}】.确认发送吗?`,
+            text: "请确认无误",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    this.setState({ sendEmailLoading: true, activeType: "three" })
+                    this.props.sendEmail(previewTitle, sendEmailTime, (successUsers) => {
+                        this.setState({ sendEmailLoading: false })
+                        swal('邮件发送成功!请提醒他们注意查收', this.props.successUsers.join("|"), "success")
+                    })
+                }
+            });
     }
     //上传工资表
     uploadExcel = () => {
         const formEle = this.dom.querySelector('.upload-excel-form')
         const formData = new FormData(formEle)
-        const { uploadExcel } = this.props
-        uploadExcel(formData)
+        this.props.uploadExcel(formData)
         this.setState({ sendEmailReady: true, activeType: "two" })
     }
     clickFileBtn = () => {
@@ -195,29 +216,33 @@ export default class Home extends React.Component {
             /.*\.xls$/.test(name) ? req = /^application\/vnd\.ms-excel$/ig : req = /^application\/vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet$/ig
             //application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
             if (!req.test(type)) {
-                return alert('错误的的文件类型,请上传xls 或 xlsx格式的文件')
+                return swal('错误的的文件类型', "请上传xls 或 xlsx格式的文件", "error")
             }
             const reader = new FileReader();
+            reader.onloadstart = () => this.setState({ loadingExcel: false })
             reader.onprogress = () => {
                 console.debug(`${name}读取中,请稍后`);
             };
             reader.onabort = () => {
                 this.setState({
+                    loadingExcel: false,
                     excelReady: false,
                 })
-                alert(`${name}读取中断,请重试`)
+                swal(`${name}读取中断,`, "请重试", "error")
             };
             reader.onerror = () => {
                 this.setState({
+                    loadingExcel: false,
                     excelReady: false
                 })
-                alert(`${name}读取失败`, 请重试)
+                swal(`${name}读取失败,`, "请重试", "error")
                 console.debug(`${name}读取失败!`)
             };
             reader.onload = function () {
                 console.debug(`${name}读取成功,文件大小：${size / 1024}KB`)
                 const result = this.result;        //读取失败时  null   否则就是读取的结果
                 _this.setState({
+                    loadingExcel: true,
                     excelReady: true,
                     activeType: "two",
                     excelInfo: [
