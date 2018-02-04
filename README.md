@@ -60,15 +60,15 @@
 ## 使用说明
 > 1. config 里面配置好 相应的字段后 如上所述,对应的 `excel` 如下
 
-![ttps://github.com/lijinke666/send-wages-tool/tree/master/document/excel.png](https://github.com/lijinke666/send-wages-tool/tree/master/document/excel.png)
+![ttps://github.com/lijinke666/send-wages-tool/blob/master/document/excel.png](https://github.com/lijinke666/send-wages-tool/blob/master/document/excel.png)
 
 > 2. 读取这个 `excel` 表格 确认无误后  点击发送
 
-![ttps://github.com/lijinke666/send-wages-tool/tree/master/document/html.png](https://github.com/lijinke666/send-wages-tool/tree/master/document/html.png)
+![ttps://github.com/lijinke666/send-wages-tool/blob/master/document/html.png](https://github.com/lijinke666/send-wages-tool/blob/master/document/html.png)
 
 > 3. 工作邮箱对应的那个人 就会收到他自己的工资条
 
-![ttps://github.com/lijinke666/send-wages-tool/tree/master/document/success.png](https://github.com/lijinke666/send-wages-tool/tree/master/document/success.png)
+![ttps://github.com/lijinke666/send-wages-tool/blob/master/document/success.png](https://github.com/lijinke666/send-wages-tool/blob/master/document/success.png)
 
 
 > exlce 名字 和工作邮箱 必填
