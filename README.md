@@ -1,4 +1,4 @@
-# send-wages-tool
+# react-salary-sheet
 发放工资条小工具
 发工资条的时候 人事首先要做一个excel表格 里面有所有同事的工资
 然后要一个一个的手动发到同事的邮箱,很麻烦 
